@@ -138,7 +138,7 @@ function Favourite() {
             </div>
           ))
         ) : (
-          <div className="noFav">No Favourites Yet</div>
+          <div className="noFav">No Favorites Yet</div>
         )}
       </div>
     </>

@@ -14,6 +14,8 @@ function AddPost() {
   }
 
   const [state, setState] = useState("create");
+  const [editPost, setEditPost] = useState({});
+  const [showEdit, setShowEdit] = useState(false);
   const [sellerPosts, setSellerPosts] = useState([]);
   const [title, settitle] = useState("");
   const [description, setdescription] = useState("");
@@ -54,10 +56,45 @@ function AddPost() {
           },
         }
       );
-      setState('show');
-      Message("Post added to favorites");
+      setState("show");
+      Message("Post added sucessfully");
     } catch (error) {
       Message("Failed to add post !");
+    }
+  };
+  const handleEdit = async (event,id) => {
+    event.preventDefault();
+    try {
+      const response = await axios.put(
+        `http://127.0.0.1:8000/posts/${id}`,
+        {
+          title,
+          post_for,
+          description,
+          post_category,
+          city,
+          address,
+          num_of_bedrooms,
+          num_of_kitchens,
+          num_of_bathrooms,
+          num_of_rooms,
+          price,
+          images,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response);
+      Message(response.data.message);
+      setShowEdit(false);
+      getUserPosts();
+      resetStates();
+    } catch (error) {
+      Message("Failed to edit post !");
     }
   };
 
@@ -93,6 +130,19 @@ function AddPost() {
     getUserPosts();
     router.refresh();
   };
+  const getPost = async (id) => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/posts/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setEditPost(response.data);
+      setShowEdit(true);
+    } catch (error) {
+      Message("Failed to get the post");
+    }
+  };
 
   const handleFiles = (e) => {
     let files = e.target.files;
@@ -108,8 +158,32 @@ function AddPost() {
     }
   };
 
+  function resetStates(){
+    settitle('');
+    setdescription('');
+    setpost_for('');
+    setaddress('');
+    setcity('');
+    setimages([]);
+    setpost_for('student');
+    setpost_category('Rent');
+    setnum_of_rooms('');
+    setnum_of_bathrooms('');
+    setnum_of_bedrooms('');
+    setnum_of_kitchens('');
+  }
   return (
-    <div className="center">
+    <div className="center cc" style={{ flexDirection: "column", gap: "30px" }}>
+      <div className="box poSx">
+        <div className="btsx">
+          <button>
+            <a href="/">
+              <i className="fa-regular fa-angles-left"></i>
+              Back To Site
+            </a>
+          </button>
+        </div>
+      </div>
       <div className="box poSx">
         <div className="btsx">
           <button
@@ -124,7 +198,7 @@ function AddPost() {
               setState("show");
             }}
           >
-            Show Posts
+            Show my Posts
           </button>
         </div>
         {state === "create" ? (
@@ -235,6 +309,18 @@ function AddPost() {
                   <option value="family">Family</option>
                 </select>
               </div>
+              <div className="input">
+                <span>Category :</span>
+                <select
+                  defaultValue={"student"}
+                  onChange={(e) => {
+                    setpost_category(e.target.value);
+                  }}
+                >
+                  <option value="rent">Rent</option>
+                  <option value="buy">Buy</option>
+                </select>
+              </div>
             </div>
             <div className="dflex">
               <div className="input">
@@ -299,11 +385,18 @@ function AddPost() {
                       <td>{e.price}</td>
                       <td className="tools">
                         <i
+                          className="fa-regular fa-edit"
+                          onClick={() => {
+                            getPost(e.id);
+                          }}
+                        ></i>
+                        <i
                           className="fa-regular fa-trash-can"
                           onClick={() => {
                             removePost(e.id);
                           }}
                         ></i>
+                        
                       </td>
                     </tr>
                   ))}
@@ -315,6 +408,162 @@ function AddPost() {
           </div>
         )}
       </div>
+      {showEdit ? (
+        <div className="formPop">
+        <form className="formx" onSubmit={(e)=>{handleEdit(e,editPost.id)}}>
+          <div className="input">
+            <span>post title :</span>
+            <input
+              type="text"
+              placeholder="Title"
+              defaultValue={editPost.title}
+              onChange={(e) => {
+                settitle(e.target.value);
+              }}
+            />
+          </div>
+          <div className="input">
+            <span>post description :</span>
+            <textarea
+              placeholder="Description"
+              defaultValue={editPost.description}
+              onChange={(e) => {
+                setdescription(e.target.value);
+              }}
+            ></textarea>
+          </div>
+          <div className="twoIn">
+            <div className="input">
+              <span>Address :</span>
+              <input
+                type="text"
+                placeholder="Address"
+                defaultValue={editPost.address}
+                onChange={(e) => {
+                  setaddress(e.target.value);
+                }}
+              />
+            </div>
+            <div className="input">
+              <span>City :</span>
+              <input
+                type="text"
+                placeholder="City"
+                defaultValue={editPost.city}
+                onChange={(e) => {
+                  setcity(e.target.value);
+                }}
+              />
+            </div>
+          </div>
+          <div className="fourIn">
+            <div className="input">
+              <span>Rooms Num :</span>
+              <input
+                type="number"
+                placeholder="Rooms Num"
+                defaultValue={editPost.num_of_rooms}
+                onChange={(e) => {
+                  setnum_of_rooms(e.target.value);
+                }}
+              />
+            </div>
+            <div className="input">
+              <span>Bedrooms Num :</span>
+              <input
+                type="number"
+                placeholder="Bedrooms Num"
+                defaultValue={editPost.num_of_bedrooms}
+                onChange={(e) => {
+                  setnum_of_bedrooms(e.target.value);
+                }}
+              />
+            </div>
+            <div className="input">
+              <span>Kitchens Num :</span>
+              <input
+                type="number"
+                placeholder="Kitchens Num"
+                defaultValue={editPost.num_of_kitchens}
+                onChange={(e) => {
+                  setnum_of_kitchens(e.target.value);
+                }}
+              />
+            </div>
+            <div className="input">
+              <span>Bathrooms Num :</span>
+              <input
+              defaultValue={editPost.num_of_bedrooms}
+                type="number"
+                placeholder="Bathrooms Num"
+                onChange={(e) => {
+                  setnum_of_bathrooms(e.target.value);
+                }}
+              />
+            </div>
+          </div>
+          <div className="twoIn">
+            <div className="input">
+              <span>Total Price :</span>
+              <input
+                type="number"
+                defaultValue={editPost.price}
+                placeholder="Total Price "
+                onChange={(e) => {
+                  setprice(e.target.value);
+                }}
+              />
+            </div>
+            <div className="input">
+              <span>Post For :</span>
+              <select
+              defaultValue={editPost.post_for}
+                onChange={(e) => {
+                  setpost_for(e.target.value);
+                }}
+              >
+                <option value="student">Student</option>
+                <option value="family">Family</option>
+              </select>
+            </div>
+            <div className="input">
+              <span>Category :</span>
+              <select
+              defaultValue={editPost.post_category}
+                onChange={(e) => {
+                  setpost_category(e.target.value);
+                }}
+              >
+                <option value="rent">Rent</option>
+                <option value="buy">Buy</option>
+              </select>
+            </div>
+          </div>
+          <div className="dflex">
+            <div className="input">
+              <span>Apartment photos :</span>
+              <label htmlFor="images">Add Photos</label>
+              <input
+                type="file"
+                accept="image/*"
+                id="images"
+                hidden
+                multiple
+                onChange={(e) => {
+                  handleFiles(e);
+                }}
+              />
+            </div>
+            <div className="imagesInrz" id="c1"></div>
+          </div>
+          <div className="btsx">
+            <button>Edit Post</button>
+          </div>
+        </form>
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 }

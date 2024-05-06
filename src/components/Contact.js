@@ -18,6 +18,9 @@ function Contact() {
       });
       console.log(response.status);
       if (response.status === 200) {
+        setName('');
+        setMessage('');
+        setEmail('');
         Message("Email Sent !");
       } else {
         Message("Failed to send !");
@@ -43,6 +46,7 @@ function Contact() {
                 type="text"
                 placeholder="Name"
                 spellCheck="false"
+                value={name}
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
@@ -51,6 +55,7 @@ function Contact() {
                 type="text"
                 placeholder="Email"
                 spellCheck="false"
+                value={email}
                 onChange={(e) => {
                   setEmail(e.target.value);
                 }}
@@ -60,6 +65,7 @@ function Contact() {
                 id=""
                 placeholder="Message"
                 spellCheck="false"
+                value={message}
                 onChange={(e) => {
                   setMessage(e.target.value);
                 }}

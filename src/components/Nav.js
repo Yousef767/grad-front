@@ -93,8 +93,8 @@ function Nav() {
             <div className="mLinks">
               {token !== null && userTybe === "user" ? (
                 <>
-                  <Link className="i" href="/favourite" title="Favourite">
-                    <i className="fa-solid fa-heart"></i> <span>Favourite</span>
+                  <Link className="i" href="/favorite" title="Favorite">
+                    <i className="fa-solid fa-heart"></i> <span>Favorite</span>
                   </Link>
                   <button
                     className="i out"
@@ -113,8 +113,8 @@ function Nav() {
                     <i className="fa-solid fa-grid-horizontal"></i>{" "}
                     <span>Dashboard</span>
                   </Link>
-                  <Link className="i" href="/favourite" title="Favourite">
-                    <i className="fa-solid fa-heart"></i> <span>Favourite</span>
+                  <Link className="i" href="/favorite" title="Favorite">
+                    <i className="fa-solid fa-heart"></i> <span>Favorite</span>
                   </Link>
                   <button
                     className="i out"
@@ -139,8 +139,8 @@ function Nav() {
           <div className="mLinks">
             {token !== null && userTybe === "user" ? (
               <>
-                <Link className="i" href="/favourite" title="Favourite">
-                  <i className="fa-solid fa-heart"></i> <span>Favourite</span>
+                <Link className="i" href="/favorite" title="Favorite">
+                  <i className="fa-solid fa-heart"></i> <span>Favorite</span>
                 </Link>
                 <button
                   className="i out"
@@ -159,8 +159,8 @@ function Nav() {
                   <i className="fa-solid fa-grid-horizontal"></i>{" "}
                   <span>Dashboard</span>
                 </Link>
-                <Link className="i" href="/favourite" title="Favourite">
-                  <i className="fa-solid fa-heart"></i> <span>Favourite</span>
+                <Link className="i" href="/favorite" title="Favorite">
+                  <i className="fa-solid fa-heart"></i> <span>Favorite</span>
                 </Link>
                 <button
                   className="i out"

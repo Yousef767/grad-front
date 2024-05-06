@@ -45,7 +45,7 @@ function PostDetails({ params }) {
   useEffect(() => {
     axios.get(`http://127.0.0.1:8000/posts/${params.postId}`) 
     .then((response) => {
-      setPost(response.data); 
+      setPost(response.data);
       setimgs(response.data.image_paths); 
       })
       .catch((error) => {
