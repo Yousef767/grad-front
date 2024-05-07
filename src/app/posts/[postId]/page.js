@@ -198,7 +198,7 @@ function PostDetails({ params }) {
                 </>
               ) : (
                 <>
-                  Price <span>EGP {post.price}</span>
+                  Price <span>EGP {post.price} <span id="postfor2">{post.post_for}</span></span>
                 </>
               )}
             </div>

@@ -3619,6 +3619,7 @@ footer {
 .filterBy h2 {
   font-size: 1.2em;
   font-weight: 400;
+  white-space: nowrap;
 }
 
 .ins {
@@ -3629,6 +3630,7 @@ footer {
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
+  flex-wrap: wrap;
 }
 
 .in {
@@ -3653,6 +3655,7 @@ footer {
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
+  align-items: flex-end;
 }
 
 .input.input2 {
@@ -3689,4 +3692,36 @@ footer {
 }
 .input.input2 span {
   color: #384b61;
+}
+
+@media (max-width: 600px) {
+  .filterBy {
+    gap: 30px;
+    flex-direction: column;
+  }
+  .input.input2 {
+    width: 150px;
+    flex-grow: 1;
+  }
+  .ins {
+    padding-left: 0;
+  }
+}
+.btn3 {
+  border-radius: 5px;
+  height: 40px;
+  text-transform: uppercase;
+}
+
+#postfor {
+  font-size: 0.6em;
+  color: red;
+  text-transform: capitalize;
+}
+
+#postfor2 {
+  font-size: 0.9em;
+  color: red;
+  text-transform: capitalize;
+  padding-left: 10px;
 }/*# sourceMappingURL=style.css.map */

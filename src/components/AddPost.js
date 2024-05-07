@@ -410,7 +410,7 @@ function AddPost() {
       </div>
       {showEdit ? (
         <div className="formPop">
-        <form className="formx" onSubmit={(e)=>{handleEdit(e,editPost.id)}}>
+        <form className="formx">
           <div className="input">
             <span>post title :</span>
             <input

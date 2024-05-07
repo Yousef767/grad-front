@@ -2,16 +2,22 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Message } from "./message";
 import axios from "axios";
+import { Router } from "next/router";
 
 function PostsInner() {
   const token = sessionStorage.getItem("token");
   const [posts, setPosts] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1); // Initially assuming there is 1 page
-
+  const [totalPages, setTotalPages] = useState(1);
+  const [maxprice, setmaxPrice] = useState("");
+  const [cat, setCat] = useState("");
+  const [postfor, setFor] = useState("");
+  const [rooms, setrooms] = useState("");
+  const [city, setcity] = useState("");
+  const [num, setNum] = useState(0);
   useEffect(() => {
     fetchPosts();
-  }, [currentPage]); // Fetch posts whenever currentPage changes
+  }, [currentPage]);
 
   const fetchallPosts = () => {
     fetch(`http://127.0.0.1:8000/posts`)
@@ -22,7 +28,7 @@ function PostsInner() {
   };
   useEffect(() => {
     fetchallPosts();
-  }, []); // Fetch posts whenever currentPage changes
+  }, []);
 
   const fetchPosts = () => {
     fetch(`http://127.0.0.1:8000/posts?page=${currentPage}`)
@@ -31,6 +37,26 @@ function PostsInner() {
         setPosts(data.data);
       });
   };
+  const fetchPostsf = () => {
+    fetch(
+      `http://127.0.0.1:8000/posts?max_price=${maxprice}&city=${city}&num_of_rooms=${rooms}&post_for=${postfor}&post_category=${cat}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data.data);
+        setPosts(data.data);
+      });
+  };
+  useEffect(() => {
+    if (num < 1) {
+      document.getElementById("btnA").style.display = "none";
+    } else {
+      document.getElementById("btnA").style.display = "flex";
+    }
+    if (num === 0) {
+      fetchPosts();
+    }
+  }, [num]);
 
   const handlePaginationClick = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -45,8 +71,6 @@ function PostsInner() {
   };
 
   async function addToFav(el, id) {
-    console.log(el);
-    console.log(id);
     if (token) {
       const button = el.target;
       if (button.classList.contains("fa-heart")) {
@@ -74,20 +98,33 @@ function PostsInner() {
   }
   const handelShow = (e) => {
     if (e.target.checked) {
+      setNum((e) => e + 1);
       let elid = e.target.id;
       let all = document.querySelectorAll(".FIns .input");
       let a = all.forEach((e, i) => {
         e.id == elid ? (e.style.display = "flex") : "";
       });
     } else {
+      let id = e.target.id;
+      if (id === "Max Price") {
+        setmaxPrice("");
+      } else if (id === "Rooms") {
+        setrooms("");
+      } else if (id === "City") {
+        setcity("");
+      } else if (id === "Posts For") {
+        setFor("");
+      } else if (id === "Category") {
+        setCat("");
+      }
+      setNum((e) => e - 1);
       let elid = e.target.id;
       let all = document.querySelectorAll(".FIns .input");
       let a = all.forEach((e, i) => {
         e.id == elid ? (e.style.display = "none") : "";
       });
       let b = all.forEach((e, i) => {
-        e.id == elid
-          ? e.lastElementChild.value = "" : "";
+        e.id == elid ? (e.lastElementChild.value = "") : "";
       });
     }
   };
@@ -100,7 +137,7 @@ function PostsInner() {
             <div className="in">
               <input
                 type="checkbox"
-                name="g1"
+                name="g0"
                 id="Max Price"
                 onChange={handelShow}
               />
@@ -109,11 +146,20 @@ function PostsInner() {
             <div className="in">
               <input
                 type="checkbox"
-                name="g2"
-                id="Location"
+                name="g1"
+                id="Rooms"
                 onChange={handelShow}
               />
-              <label htmlFor="Location">Location</label>
+              <label htmlFor="Rooms">Num Of Rooms</label>
+            </div>
+            <div className="in">
+              <input
+                type="checkbox"
+                name="g2"
+                id="City"
+                onChange={handelShow}
+              />
+              <label htmlFor="City">City</label>
             </div>
             <div className="in">
               <input
@@ -138,15 +184,42 @@ function PostsInner() {
         <div className="FIns">
           <div className="input input2" id="Max Price">
             <span>Max Price</span>
-            <input type="number" placeholder="EX:3000" />
+            <input
+              type="number"
+              placeholder="EX:3000"
+              onChange={(e) => {
+                setmaxPrice(e.target.value);
+              }}
+            />
           </div>
-          <div className="input input2" id="Location">
-            <span>Location</span>
-            <input type="text" placeholder="EX: El-Mansoura" />
+          <div className="input input2" id="Rooms">
+            <span>Num OF Rooms</span>
+            <input
+              type="number"
+              placeholder="EX:4"
+              onChange={(e) => {
+                setrooms(e.target.value);
+              }}
+            />
+          </div>
+          <div className="input input2" id="City">
+            <span>City</span>
+            <input
+              type="text"
+              placeholder="EX: El-Mansoura"
+              onChange={(e) => {
+                setcity(e.target.value);
+              }}
+            />
           </div>
           <div className="input input2" id="Posts For">
             <span>Posts For</span>
-            <select name="select">
+            <select
+              name="select"
+              onChange={(e) => {
+                setFor(e.target.value);
+              }}
+            >
               <option value="">Choose Posts Type</option>
               <option value="student">Student</option>
               <option value="family">Family</option>
@@ -154,12 +227,20 @@ function PostsInner() {
           </div>
           <div className="input input2" id="Category">
             <span>Category</span>
-            <select name="select">
+            <select
+              name="select"
+              onChange={(e) => {
+                setCat(e.target.value);
+              }}
+            >
               <option value="">Choose Category</option>
-              <option value="buy">Sell</option>
+              <option value="buy">Buy</option>
               <option value="rent">Rent</option>
             </select>
           </div>
+          <button className="btn btn3" id="btnA" onClick={fetchPostsf}>
+            apply
+          </button>
         </div>
       </div>
       <div className="box m0a postsInx">
@@ -221,7 +302,9 @@ function PostsInner() {
               </div>
             </div>
             <div className="pricexx">
-              <span>EGP {post.price}</span>
+              <span>
+                EGP {post.price} <span id="postfor">{post.post_for}</span>
+              </span>
               <a href={"/posts/" + post.id}>See More</a>
             </div>
             <button

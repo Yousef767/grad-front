@@ -3335,12 +3335,12 @@ footer {
     font-size: 1.5em;
     color: red;
     cursor: pointer;
-    &:nth-child(1){
+    &:nth-child(1) {
       color: $main;
     }
   }
 }
-.formPop{
+.formPop {
   padding: 50px 20px;
   width: 100%;
   height: auto;
@@ -3360,15 +3360,18 @@ footer {
   h2 {
     font-size: 1.2em;
     font-weight: 400;
+    white-space: nowrap;
   }
-  user-select: none ;
+  user-select: none;
 }
+
 .ins {
   display: flex;
   gap: 20px;
   align-items: center;
   padding-left: 20px;
   user-select: none;
+  flex-wrap: wrap;
 }
 .in {
   display: flex;
@@ -3388,7 +3391,8 @@ footer {
   gap: 20px;
   padding-top: 20px;
   flex-wrap: wrap;
-  user-select: none ;
+  user-select: none;
+  align-items: flex-end;
 }
 .input.input2 {
   display: flex;
@@ -3416,4 +3420,34 @@ footer {
   span {
     color: $main;
   }
+}
+@media (max-width: 600px) {
+  .filterBy {
+    gap: 30px;
+    flex-direction: column;
+  }
+  .input.input2{
+    width: 150px;
+    flex-grow: 1;
+  }
+  .ins{
+    padding-left: 0;
+  }
+}
+.btn3 {
+  border-radius: 5px;
+  height: 40px;
+  text-transform: uppercase;
+}
+
+#postfor{
+  font-size: .6em;
+  color: red;
+  text-transform: capitalize;
+}
+#postfor2{
+  font-size: .9em;
+  color: red;
+  text-transform: capitalize;
+  padding-left: 10px;
 }
